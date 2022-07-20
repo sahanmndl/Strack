@@ -12,6 +12,7 @@ import AddTransactionScreen from "./src/views/main/AddTransactionScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from '@react-navigation/native';
 
+//backend setup
 Parse.setAsyncStorage(AsyncStorage)
 Parse.initialize(API_KEYS.APP_ID, API_KEYS.JS_KEY)
 Parse.serverURL = 'https://parseapi.back4app.com/'
@@ -56,7 +57,7 @@ function MainNavigator() {
           <Stack.Screen 
               name="AddTransactionScreen"
               component={AddTransactionScreen}
-              options={{title: ""}}
+              options={{title: "Add Transaction"}}
           />
           <Stack.Screen
               name="AuthScreen"

@@ -13,5 +13,4 @@ web-build/
 # macOS
 .DS_Store
 
-src/test/test.js
 src/constants/API_KEYS.js
