@@ -9,10 +9,10 @@ import NoResults from "../../components/NoResults";
 import TransactionItem from "../../components/TransactionItem";
 import Parse from "parse/react-native";
 
-const HomeScreen = () => {
+const HomeScreen = ({ route, navigation }) => {
 
-    const navigation = useNavigation()
     const isFocused = useIsFocused()
+    //const { username } = route?.params || "no route"
     const [transactions, setTransactions] = useState([])
     const [refresh, setRefresh] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -21,31 +21,38 @@ const HomeScreen = () => {
     const [expense, setExpense] = useState("0")
     const [username, setUsername] = useState("")
 
+    //console.log(`username: ${username}`)
+
     const getCurrentUser = async () => {
-        const user = await Parse.User.currentAsync()
-        if(user !== null) {
-            setUsername(user.get('username'))
-        } else {
-            Alert.alert("Error!", "Cannot fetch username")
+        try {
+            const user = await Parse.User.currentAsync()
+            if(user !== null) {
+                setUsername(user.get('username'))
+            }
+        } catch (error) {
+            Alert.alert("Error!", error.message)
         }
     }
 
     const readTransactions = async () => {
         setLoading(true)
         getCurrentUser()
-        const parseQuery = new Parse.Query('Transactions')
+        console.log(`username: ${username}`)
+        const parseQuery = new Parse.Query("Transactions")
+        parseQuery.contains("username", username)
 
         try {
             let results = await parseQuery.find()
             let json = JSON.parse(JSON.stringify(results))
-            console.log(json)
-            setTransactions(json)
+            var filteredJSON = json.filter(it => it.username === username)
+            console.log(filteredJSON)
+            setTransactions(json.reverse())
             totalPositive(results)
             totalNegative(results)
             calculateBalance(results)
             return true
         } catch (error) {
-            Alert.alert("Error!", error.message)
+            Alert.alert("Error!", "Couldn't fetch data")
             return false
         } finally {
             setRefresh(false)
@@ -59,8 +66,8 @@ const HomeScreen = () => {
     }
 
     useEffect(() => {
-        isFocused && readTransactions()
-    }, [isFocused])
+        isFocused && username && readTransactions() 
+    }, [isFocused, username])
 
     const calculateBalance = (arr) => {
         var balance = 0
@@ -96,9 +103,24 @@ const HomeScreen = () => {
         }
     }
 
+    const logout = async () => {
+        return await Parse.User.logOut()
+        .then(async () => {
+            navigation.reset({
+                index: 0,
+                routes: [{name: "AuthScreen"}]
+            })
+            return true
+        })
+        .catch((error) => {
+            Alert.alert("Error!", error.message)
+            return false
+        })
+    }
+
     const logoutAlert = () => {
         Alert.alert(
-            "", "Do you want to logout?",
+            "Confirmation", "Do you want to logout?",
             [
                 {
                     text: 'Cancel',
@@ -107,7 +129,7 @@ const HomeScreen = () => {
                 },
                 {
                     text: 'OK',
-                    onPress: () => console.log("LogOut")
+                    onPress: () => logout()
                 }
             ],
             {cancelable: true}
@@ -147,13 +169,9 @@ const HomeScreen = () => {
                 <Text style={{fontSize: 24, fontWeight: '700'}}>Transactions</Text>
                 <TouchableOpacity
                     style={{alignSelf: 'flex-end', marginEnd: 8}}
-                    onPress={() => console.log('Charts')}
+                    onPress={() => onRefresh()}
                 >
-                    <Image
-                        style={{height: 25, width: 25}}
-                        source={require('../../../assets/pie-chart.png')}
-                        defaultSource={require('../../../assets/image.png')}
-                    />
+                    <MaterialCommunityIcon size={30} name="reload" color={Colors.BLUE} />
                 </TouchableOpacity>
             </View>
             <View style={{flex: 1}}>

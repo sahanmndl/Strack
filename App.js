@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import React, { useEffect, useState } from "react";
-import { StatusBar } from "react-native";
+import { StatusBar, Alert } from "react-native";
 import Parse from 'parse/react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import API_KEYS from "./src/constants/API_KEYS";

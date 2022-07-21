@@ -37,7 +37,7 @@ const AddTransactionScreen = () => {
             const labelValue = label.trim()
             var amountValue = parseFloat(amount.trim())
             
-            let transaction = new Parse.Object('Transactions')
+            let transaction = new Parse.Object("Transactions")
             transaction.set('label', labelValue)
             transaction.set('type', type)
             transaction.set('username', username)

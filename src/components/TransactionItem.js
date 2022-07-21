@@ -9,7 +9,7 @@ const TransactionItem = ({item}) => {
     const { objectId, label, amount, type, category, username } = item
 
     const deleteTransaction = async () => {
-        let transaction = new Parse.Object('Transactions')
+        let transaction = new Parse.Object("Transactions")
         transaction.set('objectId', objectId)
 
         try {

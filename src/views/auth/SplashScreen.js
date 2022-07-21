@@ -1,15 +1,22 @@
 import React, {  } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Image } from "react-native";
 import Colors from "../../constants/Colors";
 import { useNavigation } from '@react-navigation/native';
 
-const SplashScreen = () => {
+const SplashScreen = ({navigation}) => {
 
-    const navigation = useNavigation()
+    //const navigation = useNavigation()
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Strack</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Image
+                    style={styles.logo}
+                    source={require('../../../assets/logo.png')}
+                    defaultSource={require('../../../assets/logo.png')}
+                />
+                <Text style={styles.title}>Strack</Text>
+            </View>
             <View style={styles.innerMargin} />
             <TouchableOpacity
                 style={styles.buttonSubmit}
@@ -40,6 +47,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white'
+    },
+    logo: {
+        height: 50,
+        width: 50
     },
     title: {
         fontSize: 40,

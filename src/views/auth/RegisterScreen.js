@@ -5,9 +5,9 @@ import Colors from "../../constants/Colors";
 import Parse from "parse/react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const RegisterScreen = () => {
+const RegisterScreen = ({navigation}) => {
 
-    const navigation = useNavigation()
+    //const navigation = useNavigation()
     const [email, setEmail] = useState("")
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
